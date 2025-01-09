@@ -8,7 +8,7 @@ const githubUserSchema = new mongoose.Schema({
   following: [{ type: String }],
   repositories: { type: String, default: "" },
   created_at: { type: Date, required: true },
-  followers_url: { type: String, required: true }, // URL for fetching followers
+  followers_url: { type: String, required: true },
   following_url: { type: String, required: true },
   deleted: { type: Boolean, default: false },
 });
