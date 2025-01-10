@@ -1,5 +1,7 @@
 const axios = require("axios");
 const GithubUser = require("../models/user.models");
+require("dotenv").config();
+const token = process.env.token;
 
 const saveUserData = async (req, res) => {
   const { username } = req.params;
@@ -30,7 +32,12 @@ const saveUserData = async (req, res) => {
     }
 
     const response = await axios.get(
-      `https://api.github.com/users/${normalizedUsername}`
+      `https://api.github.com/users/${normalizedUsername}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+        },
+      }
     );
     const userData = response.data;
 
@@ -54,6 +61,7 @@ const saveUserData = async (req, res) => {
       user: newUser,
     });
   } catch (error) {
+    console.log(error.message);
     if (error.code === 11000) {
       return res.status(400).json({
         message: "User already exists in the database. Duplicate username.",
