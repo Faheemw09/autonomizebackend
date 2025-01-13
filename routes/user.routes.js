@@ -8,7 +8,7 @@ router.get("/mutual-friends/:username", controller.findMutualFollowers);
 
 router.get("/search-users", controller.searchUsers);
 
-router.delete("/delete-user/:username", controller.softDeleteUser);
+router.patch("/delete-user/:username", controller.softDeleteUser);
 
 router.patch("/update-user/:username", controller.updateUserData);
 

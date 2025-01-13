@@ -35,7 +35,7 @@ const saveUserData = async (req, res) => {
       `https://api.github.com/users/${normalizedUsername}`,
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+          Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -125,18 +125,19 @@ const searchUsers = async (req, res) => {
 
 const softDeleteUser = async (req, res) => {
   const { username } = req.params;
-  try {
-    const result = await GithubUser.findOneAndDelete({
-      username: new RegExp(`^${username}$`, "i"),
-    });
 
-    if (!result) {
+  try {
+    const user = await GithubUser.findOneAndUpdate(
+      { username: new RegExp(`^${username}$`, "i") },
+      { $set: { deleted: true } },
+      { new: true }
+    );
+
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "User deleted successfully", user: result });
+    res.status(200).json({ message: "User soft deleted successfully", user });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
